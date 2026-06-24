@@ -6,7 +6,7 @@ import com.ds.entity.Department;
 
 public interface DepartmentService {
 		
-	Department saveDepartment(Department department);
+	Department createDepartment(Department department);
 	
 	List<Department> getAllDepartments();
 	
