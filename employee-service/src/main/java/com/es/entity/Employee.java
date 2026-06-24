@@ -1,6 +1,5 @@
-package com.ds.entity;
+package com.es.entity;
 
-	
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,13 +13,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="Departments")
-public class Department {
+@Table(name="employees")
+public class Employee {
+	
+	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String code;
+	private String email;
+	private Long departmentId;
 
 }
