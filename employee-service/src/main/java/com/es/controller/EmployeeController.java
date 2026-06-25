@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmployeeController {
 	
-	private EmployeeService employeeService;
+	private final EmployeeService employeeService;
 	
 	
 	@PostMapping
