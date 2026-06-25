@@ -1,4 +1,4 @@
-package com.es.dto;
+package com.es.exception;
 
 import java.time.LocalDateTime;
 

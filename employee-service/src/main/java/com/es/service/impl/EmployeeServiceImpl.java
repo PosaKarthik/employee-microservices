@@ -8,6 +8,7 @@ import com.es.dto.EmployeeRequestDTO;
 import com.es.dto.EmployeeResponseDTO;
 import com.es.entity.Employee;
 import com.es.exception.EmployeeNotFoundException;
+import com.es.mapper.EmployeeMapper;
 import com.es.repository.EmployeeRepository;
 import com.es.service.EmployeeService;
 
@@ -20,28 +21,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	private final EmployeeRepository employeeRepository;
 	
-	private EmployeeResponseDTO mapToDTO(Employee employee) {
-		return EmployeeResponseDTO.builder()
-							.id(employee.getId())
-							.name(employee.getName())
-							.email(employee.getEmail())
-							.departmentId(employee.getDepartmentId())
-							.build();
-	}
-	
+	private final EmployeeMapper employeeMapper;
+		
 	
 	@Override
 	public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
 		
-		Employee employee=new Employee();
-		
-		employee.setName(employeeRequestDTO.getName());
-		employee.setEmail(employeeRequestDTO.getEmail());
-		employee.setDepartmentId(employeeRequestDTO.getDepartmentId());
+		Employee employee=employeeMapper.toEntity(employeeRequestDTO);
 		
 		Employee savedEntity=employeeRepository.save(employee);
 		
-		return mapToDTO(savedEntity);
+		return employeeMapper.toResponseDTO(savedEntity);
 	}
 
 	@Override
@@ -50,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		List<Employee> employees=employeeRepository.findAll();
 		
 		return employees.stream()
-						.map(this::mapToDTO)
+						.map(employeeMapper::toResponseDTO)
 						.toList();
 	}
 
@@ -60,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Employee employee=employeeRepository.findById(id)
 											.orElseThrow(
 													() -> new EmployeeNotFoundException("Employee not found with id : "+id));
-		return mapToDTO(employee);
+		return employeeMapper.toResponseDTO(employee);
 	}
 
 	@Override
@@ -76,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			
 			Employee savedEntity=employeeRepository.save(employee);
 			
-			return mapToDTO(savedEntity);
+			return employeeMapper.toResponseDTO(savedEntity);
 	}
 
 	@Override
