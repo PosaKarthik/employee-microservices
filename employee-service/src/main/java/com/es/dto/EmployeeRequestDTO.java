@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class EmployeeRequestDTO {
 
-	private String name;
-	private String email;
+	private String employeeName;
+	private String employeeEmail;
 	private Long departmentId;
 }

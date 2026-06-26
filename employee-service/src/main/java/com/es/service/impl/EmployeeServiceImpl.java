@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.es.dto.DepartmentDTO;
 import com.es.dto.EmployeeRequestDTO;
 import com.es.dto.EmployeeResponseDTO;
+import com.es.dto.EmployeeWithDepartmentResponseDTO;
 import com.es.entity.Employee;
 import com.es.exception.EmployeeNotFoundException;
+import com.es.feign.DepartmentClient;
 import com.es.mapper.EmployeeMapper;
 import com.es.repository.EmployeeRepository;
 import com.es.service.EmployeeService;
@@ -23,6 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	
 	private final EmployeeMapper employeeMapper;
 		
+	private final DepartmentClient deprtmentClient;
 	
 	@Override
 	public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
@@ -45,12 +49,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
-	public EmployeeResponseDTO getEmployeeById(Long id) {
+	public EmployeeWithDepartmentResponseDTO getEmployeeById(Long id) {
 		
 		Employee employee=employeeRepository.findById(id)
 											.orElseThrow(
 													() -> new EmployeeNotFoundException("Employee not found with id : "+id));
-		return employeeMapper.toResponseDTO(employee);
+		
+		DepartmentDTO department=deprtmentClient.getDepartmentById(employee.getEmployeeId());
+		
+		return employeeMapper.toEmployeeWithDepartmentResponseDTO(employee, department);
 	}
 
 	@Override
@@ -60,8 +67,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 											.orElseThrow( () -> new EmployeeNotFoundException("Employee not found with id : "+id));
 		
 		
-			employee.setName(employeeRequestDTO.getName());
-			employee.setEmail(employeeRequestDTO.getEmail());
+			employee.setEmployeeName(employeeRequestDTO.getEmployeeName());
+			employee.setEmployeeEmail(employeeRequestDTO.getEmployeeEmail());
 			employee.setDepartmentId(employeeRequestDTO.getDepartmentId());
 			
 			Employee savedEntity=employeeRepository.save(employee);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.es.dto.EmployeeRequestDTO;
 import com.es.dto.EmployeeResponseDTO;
+import com.es.dto.EmployeeWithDepartmentResponseDTO;
 
 public interface EmployeeService {
 	
@@ -12,7 +13,7 @@ public interface EmployeeService {
 	
 	List<EmployeeResponseDTO> getAllEmployees();
 	
-	EmployeeResponseDTO getEmployeeById(Long id);
+	EmployeeWithDepartmentResponseDTO getEmployeeById(Long id);
 	
 	EmployeeResponseDTO updateEmployee(Long id,EmployeeRequestDTO employeeRequestDTO);
 	

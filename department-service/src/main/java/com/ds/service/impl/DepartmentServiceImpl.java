@@ -43,8 +43,8 @@ public class DepartmentServiceImpl implements DepartmentService{
 		Department existingDepartment=departmentRepository.findById(id).orElse(null);
 		
 		if(existingDepartment != null) {
-			existingDepartment.setName(department.getName());
-			existingDepartment.setCode(department.getCode());
+			existingDepartment.setDepartmentName(department.getDepartmentName());
+			existingDepartment.setDepartmentCode(department.getDepartmentCode());;
 			return existingDepartment;
 		}
 		

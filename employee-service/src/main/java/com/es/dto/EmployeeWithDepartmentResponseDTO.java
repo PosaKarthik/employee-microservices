@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmployeeWithDepartmentResponseDTO {
 
-	private Long id;
-	private String name;
-	private String email;
+	private Long employeeId;
+	private String employeeName;
+	private String employeeEmail;
 	private DepartmentDTO department;
 }

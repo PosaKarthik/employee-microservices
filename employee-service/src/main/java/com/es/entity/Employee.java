@@ -20,9 +20,9 @@ public class Employee {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	private String name;
-	private String email;
+	private Long employeeId;
+	private String employeeName;
+	private String employeeEmail;
 	private Long departmentId;
 
 }

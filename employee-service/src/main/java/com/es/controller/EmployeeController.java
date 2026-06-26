@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.es.dto.EmployeeRequestDTO;
 import com.es.dto.EmployeeResponseDTO;
+import com.es.dto.EmployeeWithDepartmentResponseDTO;
 import com.es.service.EmployeeService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class EmployeeController {
 	
 	
 	@GetMapping("/{id}")
-	public EmployeeResponseDTO getEmployeeById(@PathVariable Long id) {
+	public EmployeeWithDepartmentResponseDTO getEmployeeById(@PathVariable Long id) {
 		return employeeService.getEmployeeById(id);
 	}
 	
