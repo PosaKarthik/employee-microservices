@@ -26,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	
 	private final EmployeeMapper employeeMapper;
 		
-	private final DepartmentClient deprtmentClient;
+	private final DepartmentClient departmentClient;
 	
 	@Override
 	public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
@@ -55,7 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 											.orElseThrow(
 													() -> new EmployeeNotFoundException("Employee not found with id : "+id));
 		
-		DepartmentDTO department=deprtmentClient.getDepartmentById(employee.getEmployeeId());
+		DepartmentDTO department=departmentClient.getDepartmentById(employee.getEmployeeId());
 		
 		return employeeMapper.toEmployeeWithDepartmentResponseDTO(employee, department);
 	}
