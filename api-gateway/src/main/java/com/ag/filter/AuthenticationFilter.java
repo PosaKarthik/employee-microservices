@@ -1,5 +1,6 @@
 package com.ag.filter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -12,12 +13,15 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthenticationFilter implements GlobalFilter,Ordered{
 	
+	@Value("$api.security.token")
+	private String validToken;
+	
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 		
 		String token=exchange.getRequest().getHeaders().getFirst("token");
 		
-		if(token==null || !token.equals("Karthik123")) {
+		if(token==null || !token.equals(validToken)) {
 			 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
 			 
 			 return exchange.getResponse().setComplete();
