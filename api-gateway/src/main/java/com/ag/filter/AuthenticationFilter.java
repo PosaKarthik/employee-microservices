@@ -1,35 +1,37 @@
 package com.ag.filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import reactor.core.publisher.Mono;
 
 @Component
-public class LoggingFilter implements GlobalFilter,Ordered{
+public class AuthenticationFilter implements GlobalFilter,Ordered{
 	
-	private static final Logger LOGGER=LoggerFactory.getLogger(LoggingFilter.class);	
-
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 		
-		LOGGER.info("Incoming Request : {} {}",exchange.getRequest().getMethod(),exchange.getRequest().getURI());
+		String token=exchange.getRequest().getHeaders().getFirst("token");
 		
-		return chain.filter(exchange)
-						.then(Mono.fromRunnable(() -> {
-							LOGGER.info("Outgoing Response : {}",exchange.getResponse().getStatusCode());
-						}));
+		if(token==null || !token.equals("Karthik123")) {
+			 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+			 
+			 return exchange.getResponse().setComplete();
+		}
+		
+		return chain.filter(exchange);
 	}
 
 	@Override
 	public int getOrder() {
 		
-		return 0;
+		return 1;
 	}
+
+	
 
 }
