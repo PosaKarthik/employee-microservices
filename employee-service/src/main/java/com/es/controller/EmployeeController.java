@@ -2,6 +2,7 @@ package com.es.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,16 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeController {
 	
 	private final EmployeeService employeeService;
+	
+	
+	@Value("${message}")
+	private String message;
+	
+	
+	@GetMapping("/message")
+	public String getMessage() {
+		return message;
+	}
 	
 	
 	@PostMapping
