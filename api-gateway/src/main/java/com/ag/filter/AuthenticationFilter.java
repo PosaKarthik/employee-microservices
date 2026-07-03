@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthenticationFilter implements GlobalFilter,Ordered{
 	
-	@Value("$api.security.token")
+	@Value("${api.security.token}")
 	private String validToken;
 	
 	@Override
