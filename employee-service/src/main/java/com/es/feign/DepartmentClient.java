@@ -9,6 +9,6 @@ import com.es.dto.DepartmentDTO;
 @FeignClient(name="DEPARTMENT-SERVICE")
 public interface DepartmentClient {
 
-	@GetMapping("/department/{id}")
+	@GetMapping("/departments/{id}")
 	DepartmentDTO getDepartmentById(@PathVariable Long id);
 }

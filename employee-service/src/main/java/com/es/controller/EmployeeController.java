@@ -1,6 +1,7 @@
 package com.es.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -52,7 +53,8 @@ public class EmployeeController {
 	
 	
 	@GetMapping("/{id}")
-	public EmployeeWithDepartmentResponseDTO getEmployeeById(@PathVariable Long id) {
+	public CompletableFuture<EmployeeWithDepartmentResponseDTO> getEmployeeById(@PathVariable Long id) {
+		
 		return employeeService.getEmployeeById(id);
 	}
 	

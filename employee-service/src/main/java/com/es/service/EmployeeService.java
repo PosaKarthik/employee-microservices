@@ -1,6 +1,7 @@
 package com.es.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.es.dto.EmployeeRequestDTO;
 import com.es.dto.EmployeeResponseDTO;
@@ -13,7 +14,7 @@ public interface EmployeeService {
 	
 	List<EmployeeResponseDTO> getAllEmployees();
 	
-	EmployeeWithDepartmentResponseDTO getEmployeeById(Long id);
+	CompletableFuture<EmployeeWithDepartmentResponseDTO> getEmployeeById(Long id);
 	
 	EmployeeResponseDTO updateEmployee(Long id,EmployeeRequestDTO employeeRequestDTO);
 	
