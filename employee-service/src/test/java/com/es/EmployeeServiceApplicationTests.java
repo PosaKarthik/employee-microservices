@@ -1,13 +1,30 @@
+
 package com.es;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+    "spring.config.import=optional:configserver:",
+    "spring.cloud.config.enabled=false",
+    "spring.cloud.config.import-check.enabled=false",
+
+    "spring.datasource.url=jdbc:h2:mem:employee-test;DB_CLOSE_DELAY=-1",
+    "spring.datasource.driver-class-name=org.h2.Driver",
+    "spring.datasource.username=sa",
+    "spring.datasource.password=",
+    "spring.jpa.hibernate.ddl-auto=create-drop",
+
+    "eureka.client.enabled=false",
+    "spring.cloud.discovery.enabled=false",
+    "spring.boot.admin.client.enabled=false",
+
+    "jwt.secret=VGhpc0lzQU5vdFJlYWxTZWNyZXRLZXlGb3JUZXN0aW5n",
+    "jwt.expiration=3600000"
+})
 class EmployeeServiceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }

@@ -2,17 +2,20 @@ package com.ds.service;
 
 import java.util.List;
 
-import com.ds.entity.Department;
+import com.ds.dto.DepartmentRequestDTO;
+import com.ds.dto.DepartmentResponseDTO;
 
 public interface DepartmentService {
-		
-	Department createDepartment(Department department);
-	
-	List<Department> getAllDepartments();
-	
-	Department getDepartmentById(Long id);
-	
-	Department updateDepartment(Long id,Department department);
-	
+
+	DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequestDTO);
+
+	List<DepartmentResponseDTO> getAllDepartments();
+
+	DepartmentResponseDTO getDepartmentById(Long id);
+
+	DepartmentResponseDTO updateDepartment(Long id,DepartmentRequestDTO departmentRequestDTO);
+
 	void deleteDepartment(Long id);
+
+	List<DepartmentResponseDTO> createDepartments(List<DepartmentRequestDTO> departmentRequestDTOs);
 }

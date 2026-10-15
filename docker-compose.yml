@@ -1,0 +1,154 @@
+services:
+
+  config-server:
+    image: config-server:1.0
+    container_name: config-server
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  service-registry:
+    image: service-registry:1.1
+    container_name: service-registry
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+    depends_on:
+      config-server:
+       condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+     test: ["CMD","curl","-f","http://localhost:8761/actuator/health"]
+     interval: 10s
+     timeout: 5s
+     retries: 10
+     start_period: 20s
+
+  admin-server:
+    image: admin-server:1.1
+    container_name: admin-server
+    restart: unless-stopped
+    ports:
+      - "9094:9091"
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://service-registry:8761/eureka/
+    depends_on:
+      config-server:
+       condition: service_healthy
+      service-registry:
+       condition: service_started
+    networks:
+      - microservices-network
+    healthcheck:
+     test: ["CMD","curl","-f","http://localhost:9091/actuator/health"]
+     interval: 10s
+     timeout: 5s
+     retries: 10
+     start_period: 20s
+
+  employee-service:
+    image: employee-service:1.0
+    container_name: employee-service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://service-registry:8761/eureka/
+      ADMIN_SERVER_URL: http://admin-server:9091
+      EMPLOYEE_DB_URL: jdbc:mysql://host.docker.internal:3306/microserviceemployee
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      config-server:
+       condition: service_healthy
+      service-registry:
+       condition: service_healthy
+      admin-server:
+       condition: service_started
+    networks:
+      - microservices-network
+    healthcheck:
+     test: ["CMD","curl","-f","http://localhost:8081/actuator/health"]
+     interval: 10s
+     timeout: 5s
+     retries: 10
+     start_period: 20s
+
+  department-service:
+    image: department-service:1.0
+    container_name: department-service
+    restart: unless-stopped
+    ports:
+      - "8182:8082"
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://service-registry:8761/eureka/
+      ADMIN_SERVER_URL: http://admin-server:9091
+      DEPARTMENT_DB_URL: jdbc:mysql://host.docker.internal:3306/microservicedepartment
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+     config-server:
+      condition: service_healthy
+     service-registry:
+      condition: service_healthy
+     admin-server:
+      condition: service_started
+    networks:
+      - microservices-network
+    healthcheck:
+     test: ["CMD","curl","-f","http://localhost:8082/actuator/health"]
+     interval: 10s
+     timeout: 5s
+     retries: 10
+     start_period: 20s
+
+  api-gateway:
+    image: api-gateway:1.1
+    container_name: api-gateway
+    restart: unless-stopped
+    ports:
+      - "9096:9090"
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://service-registry:8761/eureka/
+      ADMIN_SERVER_URL: http://admin-server:9091
+      API_SECURITY_TOKEN: ${API_SECURITY_TOKEN}
+    depends_on:
+     config-server:
+      condition: service_healthy
+     service-registry:
+      condition: service_healthy
+     admin-server:
+      condition: service_started
+     employee-service:
+      condition: service_started
+     department-service:
+      condition: service_started
+    networks:
+      - microservices-network
+    healthcheck:
+     test: ["CMD","curl","-f","http://localhost:9090/actuator/health"]
+     interval: 10s
+     timeout: 5s
+     retries: 10
+     start_period: 20s
+
+networks:
+  microservices-network:
+    driver: bridge
