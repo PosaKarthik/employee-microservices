@@ -26,7 +26,14 @@ jobs:
       - name: Verify Employee Service
         run: mvn -B verify
         working-directory: employee-service
-
+        
+      - name: Upload Employee Service JAR
+        uses: actions/upload-artifact@v4
+        with:
+           name: employee-service-jar
+           path: employee-service/target/employee-service-0.0.1-SNAPSHOT.jar
+           if-no-files-found: error
+            
   department-service:
     name: Build Department Service
     runs-on: ubuntu-latest
@@ -46,6 +53,13 @@ jobs:
         run: mvn -B verify
         working-directory: department-service
 
+      - name: Upload Department Service JAR
+        uses: actions/upload-artifact@v4
+        with:
+           name: department-service-jar
+           path: department-service/target/department-service-0.0.1-SNAPSHOT.jar
+           if-no-files-found: error
+
   docker-build:
     name: Build Docker Images
     runs-on: ubuntu-latest
@@ -54,6 +68,18 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
+
+      - name: Download Employee Service JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: employee-service-jar
+          path: employee-service/target
+
+      - name: Download Department Service JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: department-service-jar
+          path: department-service/target
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
